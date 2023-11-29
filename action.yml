@@ -1,0 +1,25 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: action
+name: 'Trivy - Scan a container image'
+description: 'Trivy - Scan a container image'
+
+inputs:
+  image-name:
+    description: 'Image name to scan'
+    required: true
+  severity:
+    description: 'Severities of security issues to be displayed'
+    default: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
+  format:
+    description: 'format (table,json,template,sarif,cyclonedx,spdx,spdx-json,github,cosign-vuln)'
+    default: table
+  
+runs:
+  using: composite
+  steps:
+    - id: trivy
+      name: Scan a container image with Trivy
+      uses: docker://darinpope/trivy:0.47.0
+      shell: sh
+      run: |
+        trivy image --severity ${{ inputs.severity }} --format ${{ inputs.format }} ${{ inputs.image-name }}
