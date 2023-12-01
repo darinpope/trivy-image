@@ -22,4 +22,5 @@ runs:
       uses: docker://darinpope/trivy:0.47.0
       shell: sh
       run: |
+        whoami
         trivy image --severity ${{ inputs.severity }} --format ${{ inputs.format }} ${{ inputs.image-name }}
